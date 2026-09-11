@@ -29,13 +29,14 @@ model Product {
 
   saleLines SaleLine[]
 
+  @@unique([name, brand])
   @@index([brand])
   @@index([category])
 }
 
 model Salesperson {
   id        String   @id @default(cuid())
-  name      String
+  name      String   @unique
   createdAt DateTime @default(now())
 
   saleLines SaleLine[]
