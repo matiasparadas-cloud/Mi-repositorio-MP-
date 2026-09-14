@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { runSync } from "@/lib/sync";
-import { downloadExcelFromSharedLink } from "@/lib/onedrive-share";
+import { downloadExcelFromOneDrive } from "@/lib/graph-client";
 import { parseSalesWorkbook } from "@/lib/excel-parser";
 
 export const dynamic = "force-dynamic";
@@ -20,10 +20,16 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "No autorizado" }, { status: 401 });
   }
 
-  const shareUrl = process.env.ONEDRIVE_SHARE_URL ?? "";
+  const config = {
+    tenantId: process.env.MS_TENANT_ID ?? "",
+    clientId: process.env.MS_CLIENT_ID ?? "",
+    clientSecret: process.env.MS_CLIENT_SECRET ?? "",
+    driveId: process.env.MS_DRIVE_ID ?? "",
+    itemId: process.env.MS_EXCEL_ITEM_ID ?? "",
+  };
 
   const result = await runSync({
-    downloadExcel: () => downloadExcelFromSharedLink(shareUrl),
+    downloadExcel: () => downloadExcelFromOneDrive(config),
     parseWorkbook: (buffer) => parseSalesWorkbook(buffer),
   });
 
