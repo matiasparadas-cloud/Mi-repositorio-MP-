@@ -6,6 +6,7 @@ import {
   getCalendarWeekRange,
   getPreviousCalendarWeekRange,
   getYoyPreviousPeriodRange,
+  getCalendarMonthRange,
   calculatePeriodGrowth,
   type SaleLineMetric,
 } from "./metrics";
@@ -116,5 +117,19 @@ describe("calculatePeriodGrowth", () => {
     expect(result.salesAmountGrowth).toBeNull();
     expect(result.salesQuantityGrowth).toBeNull();
     expect(result.marginAmountGrowth).toBeNull();
+  });
+});
+
+describe("getCalendarMonthRange", () => {
+  it("devuelve el 1ro del mes (incl.) al 1ro del mes siguiente (excl.), UTC", () => {
+    const { start, end } = getCalendarMonthRange(new Date("2026-09-14T15:30:00Z"));
+    expect(start.toISOString()).toBe("2026-09-01T00:00:00.000Z");
+    expect(end.toISOString()).toBe("2026-10-01T00:00:00.000Z");
+  });
+
+  it("maneja diciembre cruzando al año siguiente", () => {
+    const { start, end } = getCalendarMonthRange(new Date("2026-12-20T00:00:00Z"));
+    expect(start.toISOString()).toBe("2026-12-01T00:00:00.000Z");
+    expect(end.toISOString()).toBe("2027-01-01T00:00:00.000Z");
   });
 });

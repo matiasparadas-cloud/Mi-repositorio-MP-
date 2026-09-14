@@ -117,3 +117,13 @@ export function getYoyPreviousPeriodRange(start: Date, end: Date): DateRange {
 
   return { start: previousStart, end: previousEnd };
 }
+
+/**
+ * Mes calendario en UTC: día 1 00:00:00 (incluido) al día 1 del mes siguiente
+ * 00:00:00 (excluido).
+ */
+export function getCalendarMonthRange(referenceDate: Date): DateRange {
+  const start = new Date(Date.UTC(referenceDate.getUTCFullYear(), referenceDate.getUTCMonth(), 1));
+  const end = new Date(Date.UTC(referenceDate.getUTCFullYear(), referenceDate.getUTCMonth() + 1, 1));
+  return { start, end };
+}
