@@ -17,10 +17,17 @@ decisiones.
 - El archivo de ventas es un libro de Excel que vive en el **OneDrive (Microsoft 365)** del
   usuario.
 - El archivo se actualiza a diario (carga manual del usuario, fuera del alcance de este sistema).
-- Un **proceso automático (cron diario)** descarga el Excel vía **Microsoft Graph API**, usando
-  **permisos de aplicación** (app-only, con consentimiento de administrador) — no permisos
-  delegados atados a un usuario que inicia sesión. Esto permite que la sincronización corra sola,
-  sin que nadie tenga que volver a autenticarse.
+- Un **proceso automático (cron diario)** descarga el Excel.
+  - **Decisión revisada en la Tarea 8 (2026-09-14):** el diseño original preveía Microsoft Graph
+    API con permisos de aplicación (app-only, con consentimiento de administrador), pero el
+    usuario prefirió evitar por completo el registro de una app en Azure AD y el paso de
+    consentimiento de administrador. Se optó en cambio por un **link de OneDrive compartido
+    como "Cualquiera con el link puede ver"**, descargado directamente (parámetro `download=1`).
+    Esto elimina toda la complejidad de Azure (sin `MS_TENANT_ID`/`MS_CLIENT_ID`/
+    `MS_CLIENT_SECRET`/`MS_DRIVE_ID`/`MS_EXCEL_ITEM_ID`, solo `ONEDRIVE_SHARE_URL`), a cambio de
+    una contrapartida de seguridad explícita: el link funciona como una clave — cualquiera que lo
+    consiga puede descargar el Excel de ventas sin autenticarse. El usuario aceptó ese trade-off
+    de forma explícita, informado del riesgo. Ver `docs/superpowers/guides/onedrive-linking.md`.
 - El proceso calcula las métricas del punto 3 y guarda los resultados en una base de datos
   **Postgres**.
 - **El navegador nunca lee el Excel en vivo.** El dashboard siempre lee resultados ya calculados

@@ -39,7 +39,7 @@ configuración inicial del paso 2), cargá:
 | `NEXTAUTH_SECRET` | Un valor aleatorio largo. Se puede generar en <https://generate-secret.vercel.app/32> y pegar el resultado. |
 | `NEXTAUTH_URL` | La URL pública del proyecto, ej. `https://bi-ventas.vercel.app` (Vercel te la muestra después del primer deploy; se puede editar y volver a desplegar). |
 | `CRON_SECRET` | Otro valor aleatorio largo (mismo generador de arriba). Vercel lo usa automáticamente para autorizar la sincronización diaria — no hace falta hacer nada más con este valor. |
-| `MS_TENANT_ID`, `MS_CLIENT_ID`, `MS_CLIENT_SECRET`, `MS_DRIVE_ID`, `MS_EXCEL_ITEM_ID` | Los 5 valores de `docs/superpowers/guides/onedrive-linking.md`. |
+| `ONEDRIVE_SHARE_URL` | El link que copiaste en `docs/superpowers/guides/onedrive-linking.md`. |
 | `BOOTSTRAP_SECRET` | Otro valor aleatorio largo — se usa **una sola vez**, para crear tu cuenta (paso 5). Después lo podés borrar de Vercel. |
 
 Después de cargarlas todas, si ya habías desplegado, andá a la pestaña
@@ -86,9 +86,11 @@ Después de cargarlas todas, si ya habías desplegado, andá a la pestaña
 
 ## Mantenimiento (lo único que vas a tener que volver a tocar)
 
-- **Cada 24 meses**: renovar el secreto de Azure (`MS_CLIENT_SECRET`) — ver
-  Parte 2 de `onedrive-linking.md`.
-- **Si cambia el nombre/ubicación del archivo Excel**: repetir la Parte 4 de
-  `onedrive-linking.md` para conseguir el nuevo `MS_EXCEL_ITEM_ID`.
+- **Si movés o borrás el archivo Excel**: el link de OneDrive deja de
+  funcionar — generá uno nuevo (`onedrive-linking.md`) y actualizá
+  `ONEDRIVE_SHARE_URL` en Vercel.
+- **Si sospechás que el link se filtró**: en OneDrive, dejá de compartir el
+  archivo y volvé a compartirlo (genera un link nuevo), y actualizá
+  `ONEDRIVE_SHARE_URL`.
 - Todo lo demás (altas de usuarios, actualizaciones del panel, backups de la
   base de datos) no requiere ninguna acción tuya.
